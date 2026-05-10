@@ -17,10 +17,10 @@ function AppRoutes () {
         path="/login" 
         element={<LoginAdmin />} 
         />
-        <Route 
+        {/*<Route 
         path="/register" 
         element={<RegisterAdmin />} 
-        />
+        />*/}
         <Route 
         path="/dashboard"
         element={<DashboardAdmin />} 
