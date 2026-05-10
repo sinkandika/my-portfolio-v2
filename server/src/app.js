@@ -10,6 +10,7 @@ const projectRoutes = require("./routes/projectRoutes");
 const app = express();
 
 // Middleware
+/* disable for vercel testing
 app.use(
   cors({
     origin: [
@@ -17,7 +18,8 @@ app.use(
     ],
     credentials: true,
   })
-);
+);*/
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
