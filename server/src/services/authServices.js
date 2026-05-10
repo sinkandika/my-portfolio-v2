@@ -32,10 +32,6 @@ const registerAdminService = async (adminData) => {
   return result.rows[0];
 };
 
-module.exports = {
-  registerAdminService,
-};
-
 // Login admin (SQL)
 const loginAdminService = async (loginData) => {
   const { email, password } = loginData;

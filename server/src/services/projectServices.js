@@ -1,26 +1,6 @@
 const pool = require("../config/db");
 
 // get all projects (handle SQL)
-/*const getProjectsService = async () => {
-  const result = await pool.query(`
-    SELECT
-      p.*,
-      COALESCE(
-        json_agg(pi.image_url)
-        FILTER (WHERE pi.image_url IS NOT NULL),
-        '[]'
-      ) AS images
-    FROM projects p
-    LEFT JOIN project_images pi
-      ON p.id = pi.project_id
-    GROUP BY p.id
-    ORDER BY p.created_at DESC
-  `);
-
-  return result.rows;
-};*/
-
-// get all projects (handle SQL)
 const getProjectsService = async () => {
   const result = await pool.query(`
     SELECT
