@@ -10,16 +10,16 @@ const projectRoutes = require("./routes/projectRoutes");
 const app = express();
 
 // Middleware
-/* disable for vercel testing
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
+      "https://my-portfolio-v2-bgyg.vercel.app",
     ],
     credentials: true,
   })
-);*/
-app.use(cors());
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
