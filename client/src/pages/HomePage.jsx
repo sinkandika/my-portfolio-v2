@@ -16,6 +16,7 @@ function HomePage () {
     const fetchProjects = async () => {
       try {
         const data = await getAllProjects();
+        console.log(data);
         setProjects(data);
       } catch (err) {
         console.log(err);
