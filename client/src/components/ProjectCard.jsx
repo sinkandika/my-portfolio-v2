@@ -9,7 +9,7 @@ function ProjectCard ({ project }) {
       whileInView={{ opacity: 1, x: 0}}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      className="flex justify-between gap-10 flex-col-reverse md:flex-col  xl:flex-row py-10 min-w-md"
+      className="flex justify-between gap-10 flex-col-reverse md:flex-col xl:flex-row py-10"
       >
       <div className="flex flex-1 flex-col">
         <p className="text-secondary">
