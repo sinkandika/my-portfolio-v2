@@ -11,47 +11,48 @@ function ProjectCard ({ project }) {
       transition={{ duration: 0.8 }}
       className="flex justify-between gap-10 flex-col-reverse md:flex-col xl:flex-row py-10"
       >
-      <div className="flex flex-1 flex-col">
-        <p className="text-secondary">
-          {project.technologies}
-        </p>
-        <p
-        style={{
-          color: project.title_color
-        }}
-        className="text-3xl"
-        >
-          {project.title}
-        </p>
-        <p className="text-secondary min-w-sm">
-          {project.description}
-        </p>
-        {project.live_link && (
-          <a
-          href={project.live_link}
-          target="_blank"
-          rel="noopener noreferrer"
-          onMouseEnter={() => setIsHover(true)}
-          onMouseLeave={() => setIsHover(false)}
+      
+        <div className="flex flex-1 flex-col">
+          <p className="text-secondary">
+            {project.technologies}
+          </p>
+          <p
           style={{
-            color: isHover
-            ? "#2F3142"
-            : project.hover_color
+            color: project.title_color
           }}
-          className="transition duration-300"
+          className="text-3xl"
           >
-            Check it out!
-          </a>
-        )}
+            {project.title}
+          </p>
+          <p className="text-secondary">
+            {project.description}
+          </p>
+          {project.live_link && (
+            <a
+            href={project.live_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+            style={{
+              color: isHover
+              ? "#2F3142"
+              : project.hover_color
+            }}
+            className="transition duration-300"
+            >
+              Check it out!
+            </a>
+          )}
+        </div>
 
-      </div>
-      <div className="flex flex-1 justify-center md:justify-end">
-        <img 
-        src={project.images[0].image_url} 
-        alt={project.title} 
-        className="w-xl min-w-sm"
-        />
-      </div>
+        <div className="flex flex-1 justify-center md:justify-end">
+          <img 
+          src={project.images[0].image_url} 
+          alt={project.title} 
+          className="w-xl"
+          />
+        </div>
       </motion.div>
   );
 };

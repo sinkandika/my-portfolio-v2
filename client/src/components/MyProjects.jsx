@@ -1,8 +1,8 @@
 import ProjectCard from "./ProjectCard";
 
 
-function MyProjects ({ projects }) {
-
+function MyProjects ({ projects, loading }) {
+  
 
   return (
     <div
@@ -13,12 +13,19 @@ function MyProjects ({ projects }) {
         My Projects
       </p>
       <div>
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-          />
-        ))}
+        {loading ? (
+          <div className="flex flex-col justify-center items-center py-10 gap-4">
+            <div className="w-12 h-12 rounded-full border-fourth border-t-hero border-4 animate-[spin_0.5s_linear_infinite] "></div>
+            <p>Loading my projects.... </p>
+          </div>
+        ) : (
+          projects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+            />
+          ))
+        )}
       </div>
     </div>
   );

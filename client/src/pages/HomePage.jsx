@@ -9,17 +9,20 @@ import Footer from "../components/Footer";
 
 function HomePage () {
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // fetch projects
   useEffect(() => {
-
     const fetchProjects = async () => {
+
       try {
         const data = await getAllProjects();
         console.log(data)
         setProjects(data);
       } catch (err) {
         console.log(err);
+      }finally {
+        setLoading(false);
       }
     };
 
@@ -36,6 +39,7 @@ function HomePage () {
       <AboutMe />
       <MyProjects
       projects={projects} 
+      loading={loading}
       />
       <ContactMe />
       <Footer />

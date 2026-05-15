@@ -13,8 +13,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
-      "https://my-portfolio-v2-bgyg.vercel.app",
+      "http://localhost:5173", // frontend port
+      "https://my-portfolio-v2-bgyg.vercel.app", // frontend live web
     ],
     credentials: true,
   })

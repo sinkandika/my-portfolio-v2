@@ -8,11 +8,11 @@ function NavBar () {
           <img
             src={SnkIcon}
             alt="snk"
-            className="w-8 h-8 cursor-pointer"
+            className="w-6 h-6 md:w-8 md:h-8 cursor-pointer"
           />
         </a>
       </div>
-      <div className="flex gap-x-5 md:gap-x-20">
+      <div className="flex gap-x-5 text-sm md:text-base md:gap-x-20">
         <a 
         href="#about"
         className="text-secondary hover:text-hero transition duration-300"
