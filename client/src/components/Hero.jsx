@@ -11,6 +11,7 @@ function Hero () {
       transition={{ duration: 0.8 }}
       className="flex flex-col-reverse md:flex-row justify-center md:justify-between items-center gap-y-10 md-gap-y-0"
       >
+
         <div className="flex flex-col gap-y-4 text-center md:text-left items-center md:items-baseline">
           <div>
             <p className="text-hero text-2xl">
@@ -37,13 +38,15 @@ function Hero () {
             Find me more
           </button>
         </div>
-        <div>
+
+        <div className="w-full flex justify-center md:justify-end items-center">
           <img
           src={MyImage}
           alt="img"
-          className="w-60 h-60 md:w-90 md:h-90 shrink-0 min-w-fit"
+          className="w-50 md:w-sm shrink-0 object-cover"
           />
         </div>
+
       </motion.div>
     </div>
   );
