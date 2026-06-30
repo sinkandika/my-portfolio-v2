@@ -1,11 +1,11 @@
-const pool = require("../config/db");
-const { 
+
+import { 
   getProjectsService,
   postProjectService,
   updateProjectService,
   deleteProjectService,
   deleteProjectImageService,
-} = require("../services/projectServices");
+} from "../services/projectServices.js";
 
 
 // get all projects (request/response)
@@ -104,7 +104,7 @@ const deleteProject = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getAllProjects,
   postProject,
   updateProject,

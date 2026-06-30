@@ -3,13 +3,12 @@ import ProjectCard from "./ProjectCard";
 
 function MyProjects ({ projects, loading }) {
   
-
   return (
     <div
     id="myPortfolio"
     className="relative bg-white p-10 md:p-40 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] flex flex-col gap-y-10 z-96"
     >
-      <p className="text-2xl text-hero">
+      <p className="text-2xl text-hero text-left md:text-center xl:text-left">
         My Projects
       </p>
       <div>

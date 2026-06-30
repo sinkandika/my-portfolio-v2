@@ -1,29 +1,30 @@
-const express = require("express"); 
-const pool = require("../config/db");
-const verifyToken = require("../middleware/verifyToken");
-const { 
-  getAllProjects, 
-  postProject, 
+import express from "express";
+
+import verifyToken from "../middleware/verifyToken.js";
+
+import {
+  getAllProjects,
+  postProject,
   updateProject,
   deleteProject,
   deleteProjectImage,
-} = require("../controllers/projectController");
+} from "../controllers/projectController.js";
 
 const router = express.Router();
 
-// GET view all project (endpoint)
+// GET all projects
 router.get("/", getAllProjects);
 
-// POST create new project (endpoint)
+// POST new project
 router.post("/", verifyToken, postProject);
 
-// PUT update project (endpoint)
+// PUT project
 router.put("/:id", verifyToken, updateProject);
 
-// DELETE image (endpoint)
-router.delete('/project-images/:id', verifyToken, deleteProjectImage);
+// DELETE project image
+router.delete("/project-images/:id", verifyToken, deleteProjectImage);
 
-// DELETE project (endpoint)
+// DELETE project
 router.delete("/:id", verifyToken, deleteProject);
 
-module.exports = router;
+export default router;

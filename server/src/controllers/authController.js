@@ -1,7 +1,7 @@
-const { 
-  registerAdminService, 
-  loginAdminService 
-} = require("../services/authServices");
+import {
+  registerAdminService,
+  loginAdminService,
+} from "../services/authServices.js";
 
 // register admin (response)
 const registerAdmin = async (req, res) => {
@@ -52,7 +52,7 @@ const loginAdmin = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   registerAdmin,
   loginAdmin,
 };

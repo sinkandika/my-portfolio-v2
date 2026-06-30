@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { uploadImagesToCloudinary } from "../../services/cloudinaryService";
+import { uploadImages } from "../../services/cloudinaryService";
 import { deleteProjectImage } from "../../services/projectService";
 
 function EditProjectModal({
@@ -13,6 +13,8 @@ function EditProjectModal({
   const [technologies, setTechnologies] = useState("");
   const [liveLink, setLiveLink] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
+  const [titleColor, setTitleColor] = useState("");
+  const [hoverColor, setHoverColor] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [existingImages, setExistingImages] = useState([]); // show all images
 
@@ -24,7 +26,12 @@ function EditProjectModal({
       setTechnologies(project.technologies);
       setLiveLink(project.live_link);
       setIsFeatured(project.is_featured);
+      setTitleColor(project.title_color);
+      setHoverColor(project.hover_color);
       setExistingImages(project.images || []);
+
+      // Reset newly selected files
+      setSelectedFiles([]);
     }
   }, [project]);
 
@@ -38,8 +45,7 @@ function EditProjectModal({
       let newImageUrls = [];
 
       if (selectedFiles.length > 0) {
-        newImageUrls =
-          await uploadImagesToCloudinary(selectedFiles);
+        newImageUrls = await uploadImages(selectedFiles);
       }
 
       await onUpdate(project.id, {
@@ -48,8 +54,12 @@ function EditProjectModal({
         technologies,
         live_link: liveLink,
         is_featured: isFeatured,
+        title_color: titleColor,
+        hover_color: hoverColor,
         images: newImageUrls,
       });
+
+      setSelectedFiles([]);
 
       onClose();
     } catch (error) {
@@ -57,6 +67,7 @@ function EditProjectModal({
       alert("Update failed");
     }
   };
+
 
   // delete image
   const handleDeleteImage = async (imageId) => {
@@ -139,6 +150,22 @@ function EditProjectModal({
             />
             Featured
           </label>
+
+          <input
+            type="text"
+            placeholder="Title Color"
+            className="border p-2 w-full"
+            value={titleColor}
+            onChange={(e) => setTitleColor(e.target.value)}
+          />
+
+          <input
+            type="text"
+            placeholder="Hover Color"
+            className="border p-2 w-full"
+            value={hoverColor}
+            onChange={(e) => setHoverColor(e.target.value)}
+          />
 
 
           <div className="flex gap-3">

@@ -1,23 +1,21 @@
-const express = require("express");
-const router = express.Router();
-const pool = require("../config/db");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+import express from "express";
 
-const { registerAdmin, 
+import {
+  registerAdmin,
   loginAdmin,
-} = require("../controllers/authController");
+} from "../controllers/authController.js";
 
-// register admin
+const router = express.Router();
+
+// Register admin
 router.post("/register", registerAdmin);
 
-// login admin
+// Login admin
 router.post("/login", loginAdmin);
 
-
-// test route
+// Test route
 router.get("/", (req, res) => {
   res.send("Auth route working");
 });
 
-module.exports = router;
+export default router;

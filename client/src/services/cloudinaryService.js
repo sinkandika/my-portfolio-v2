@@ -1,23 +1,22 @@
-import axios from "axios";
+import api from "./api";
 
-export const uploadImagesToCloudinary = async (files) => {
-  const uploadedUrls = [];
 
-  for (const file of files) {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append(
-      "upload_preset",
-      "my_portfolio_v2"
-    );
+export const uploadImages = async (files) => {
+  const formData = new FormData();
 
-    const response = await axios.post(
-      "https://api.cloudinary.com/v1_1/dn4ptq6kb/image/upload",
-      formData
-    );
+  files.forEach((file) => {
+    formData.append("images", file);
+  });
 
-    uploadedUrls.push(response.data.secure_url);
-  }
+  const response = await api.post(
+    "/cloudinary/upload",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 
-  return uploadedUrls;
+  return response.data.images;
 };

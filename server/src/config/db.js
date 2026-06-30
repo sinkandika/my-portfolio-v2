@@ -1,23 +1,11 @@
-const { Pool } = require("pg"); // postgresql connection in supabase
+import { createClient } from "@supabase/supabase-js";
+import dotenv from "dotenv";
 
-/*const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+dotenv.config();
 
-module.exports = pool;*/
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
-
-module.exports = pool;
+export default supabase;

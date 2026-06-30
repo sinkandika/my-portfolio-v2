@@ -1,52 +1,58 @@
-const pool = require("../config/db");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+import supabase from "../config/db.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 // register admin (SQL)
 const registerAdminService = async (adminData) => {
   const { name, email, password } = adminData;
 
   // check existing email
-  const existingUser = await pool.query(
-    "SELECT * FROM admin_users WHERE email = $1",
-    [email]
-  );
+  const { data: existingUser, error: existingUserError } = await supabase
+    .from("admin_users")
+    .select("*")
+    .eq("email", email);
 
-  if (existingUser.rows.length > 0) {
+  if (existingUserError) throw existingUserError;
+
+  if (existingUser.length > 0) {
     throw new Error("Email already registered");
   }
 
   // hash password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // insert admin
-  const result = await pool.query(
-    `
-    INSERT INTO admin_users (name, email, password)
-    VALUES ($1, $2, $3)
-    RETURNING id, name, email, role
-    `,
-    [name, email, hashedPassword]
-  );
+  // insert to db
+  const { data, error: insertError } = await supabase
+    .from("admin_users")
+    .insert({
+      name,
+      email,
+      password: hashedPassword,
+    })
+    .select("id, name, email, role")
+    .single();
 
-  return result.rows[0];
+  if (insertError) throw insertError;
+
+  return data;
 };
+
+
 
 // Login admin (SQL)
 const loginAdminService = async (loginData) => {
   const { email, password } = loginData;
 
   // find admin by email
-  const result = await pool.query(
-    "SELECT * FROM admin_users WHERE email=$1",
-    [email]
-  );
+  const { data: admin, error } = await supabase
+    .from("admin_users")
+    .select("id, name, email, password, role")
+    .eq("email", email)
+    .single();
 
-  if (result.rows.length === 0) {
-    throw new Error ("Invalid email or password");
+  if (error || !admin) {
+    throw new Error("Invalid email or password");
   }
-
-  const admin = result.rows[0];
 
   // compare password
   const isMatch = await bcrypt.compare(password, admin.password);
@@ -79,7 +85,7 @@ const loginAdminService = async (loginData) => {
   };
 };
 
-module.exports = {
+export {
   registerAdminService,
   loginAdminService,
 };

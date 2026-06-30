@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { uploadImagesToCloudinary } from "../../services/cloudinaryService";
+import { uploadImages, } from "../../services/cloudinaryService";
 
 function CreateProject({ isOpen, onClose, onCreate }) {
   const [title, setTitle] = useState("");
@@ -7,6 +7,8 @@ function CreateProject({ isOpen, onClose, onCreate }) {
   const [technologies, setTechnologies] = useState("");
   const [liveLink, setLiveLink] = useState("");
   const [isFeatured, setIsFeatured] = useState(false);
+  const [titleColor, setTitleColor] = useState("");
+  const [hoverColor, setHoverColor] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -19,17 +21,22 @@ function CreateProject({ isOpen, onClose, onCreate }) {
     try {
       setLoading(true);
 
-      // Upload images to Cloudinary
-      const uploadedImageUrls =
-        await uploadImagesToCloudinary(selectedFiles);
+      let uploadedImageUrls = [];
 
-      // Send to backend
+      // Upload images only if there are any
+      if (selectedFiles.length > 0) {
+        uploadedImageUrls = await uploadImages(selectedFiles);
+      }
+
+      // Save project
       await onCreate({
         title,
         description,
         technologies,
         live_link: liveLink,
         is_featured: isFeatured,
+        title_color: titleColor,
+        hover_color: hoverColor,
         images: uploadedImageUrls,
       });
 
@@ -39,11 +46,13 @@ function CreateProject({ isOpen, onClose, onCreate }) {
       setTechnologies("");
       setLiveLink("");
       setIsFeatured(false);
+      setTitleColor("");
+      setHoverColor("");
       setSelectedFiles([]);
 
       onClose();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       alert("Failed to create project");
     } finally {
       setLoading(false);
@@ -88,8 +97,7 @@ function CreateProject({ isOpen, onClose, onCreate }) {
             value={liveLink}
             onChange={(e) => setLiveLink(e.target.value)}
           />
-
-          {/* Multiple Image Upload */}
+          <p>Recommend image: 1024 × 768 px </p>
           <input
             type="file"
             multiple
@@ -129,6 +137,22 @@ function CreateProject({ isOpen, onClose, onCreate }) {
             />
             Featured Project
           </label>
+
+          <input
+            type="text"
+            placeholder="Title Color"
+            className="border p-2 w-full"
+            value={titleColor}
+            onChange={(e) => setTitleColor(e.target.value)}
+          />
+
+          <input
+            type="text"
+            placeholder="Hover Color"
+            className="border p-2 w-full"
+            value={hoverColor}
+            onChange={(e) => setHoverColor(e.target.value)}
+          />
 
           <div className="flex gap-3">
             <button

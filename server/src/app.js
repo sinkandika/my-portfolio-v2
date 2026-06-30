@@ -1,20 +1,21 @@
-// 1. import package
-const express = require("express");
-const cors = require("cors");
-// 2. env
-require("dotenv").config();
-// 3. local files
-const authRoutes = require("./routes/authRoutes");
-const projectRoutes = require("./routes/projectRoutes");
-// 4. app logic
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+
+import authRoutes from "./routes/authRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
+import cloudinaryRoutes from "./routes/cloudinaryRoutes.js";
+
+dotenv.config();
+
 const app = express();
 
 // Middleware
 app.use(
   cors({
     origin: [
-      "http://localhost:5173", // frontend port
-      "https://my-portfolio-v2-bgyg.vercel.app", // frontend live web
+      "http://localhost:5173",
+      "https://my-portfolio-v2-bgyg.vercel.app",
     ],
     credentials: true,
   })
@@ -23,13 +24,14 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Test route
-app.get("/", (req, res) => { // if people go to / execute this function below 
-  res.send("Portfolio V2 backend running success"); // send to user and end request cycle
+// Health check
+app.get("/", (req, res) => {
+  res.send("Portfolio V2 backend running successfully");
 });
 
-// Project routes
-app.use("/api/projects", projectRoutes); // if people open api/projects, run projectRoutes
-app.use("/api/auth", authRoutes); // for auth/login and auth/register
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/cloudinary", cloudinaryRoutes);
 
-module.exports = app;
+export default app;

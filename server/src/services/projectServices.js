@@ -1,28 +1,24 @@
-const pool = require("../config/db");
+import supabase from "../config/db.js";
 
 // get all projects (handle SQL)
 const getProjectsService = async () => {
-  const result = await pool.query(`
-    SELECT
-      p.*,
-      COALESCE(
-        json_agg(
-          json_build_object(
-            'id', pi.id,
-            'image_url', pi.image_url
-          )
-        )
-        FILTER (WHERE pi.id IS NOT NULL),
-        '[]'
-      ) AS images
-    FROM projects p
-    LEFT JOIN project_images pi
-      ON p.id = pi.project_id
-    GROUP BY p.id
-    ORDER BY p.created_at DESC
-  `);
+  const { data, error } = await supabase
+    .from("projects")
+    .select(`
+      *,
+      project_images (
+        id,
+        image_url
+      )
+    `)
+    .order("created_at", { ascending: false });
 
-  return result.rows;
+  if (error) throw error;
+
+  return data.map(project => ({
+    ...project,
+    images: project.project_images,
+  }));
 };
 
 // post project (handle SQL)
@@ -33,40 +29,40 @@ const postProjectService = async (projectData) => {
     technologies,
     live_link,
     is_featured,
-    images, // project_images wrap into COALESCE
+    title_color,
+    hover_color,
+    images,
   } = projectData;
 
-  // create to projects
-  const projectResult = await pool.query(
-    `
-    INSERT INTO projects 
-    (title, description, technologies, live_link, is_featured)
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING *
-    `,
-    [
+  // Create project
+  const { data: newProject, error: projectError } = await supabase
+    .from("projects")
+    .insert({
       title,
       description,
       technologies,
       live_link,
       is_featured,
-    ]
-  );
+      title_color,
+      hover_color,
+    })
+    .select()
+    .single();
 
-  const newProject = projectResult.rows[0];
+  if (projectError) throw projectError;
 
-  //  save multiple images to project_images
+  // Save project images
   if (images && images.length > 0) {
-    for (const imageUrl of images) {
-      await pool.query(
-        `
-        INSERT INTO project_images
-        (project_id, image_url)
-        VALUES ($1, $2)
-        `,
-        [newProject.id, imageUrl]
-      );
-    }
+    const imageRows = images.map((imageUrl) => ({
+      project_id: newProject.id,
+      image_url: imageUrl,
+    }));
+
+    const { error: imageError } = await supabase
+      .from("project_images")
+      .insert(imageRows);
+
+    if (imageError) throw imageError;
   }
 
   return newProject;
@@ -80,46 +76,41 @@ const updateProjectService = async (id, projectData) => {
     technologies,
     live_link,
     is_featured,
+    title_color,
+    hover_color,
     images,
   } = projectData;
 
-  // update to projects
-  const result = await pool.query(
-    `
-    UPDATE projects
-    SET
-      title = $1,
-      description = $2,
-      technologies = $3,
-      live_link = $4,
-      is_featured = $5
-    WHERE id = $6
-    RETURNING *
-    `,
-    [
+  // Update project
+  const { data: updatedProject, error: updateError } = await supabase
+    .from("projects")
+    .update({
       title,
       description,
       technologies,
       live_link,
       is_featured,
-      id,
-    ]
-  );
+      title_color,
+      hover_color,
+    })
+    .eq("id", id)
+    .select()
+    .single();
 
-  const updatedProject = result.rows[0];
+  if (updateError) throw updateError;
 
-  // insert new images to project_images
+  // Insert newly added images
   if (images && images.length > 0) {
-    for (const imageUrl of images) {
-      await pool.query(
-        `
-        INSERT INTO project_images
-        (project_id, image_url)
-        VALUES ($1, $2)
-        `,
-        [id, imageUrl]
-      );
-    }
+    const imageRows = images.map((imageUrl) => ({
+      project_id: id,
+      image_url: imageUrl,
+    }));
+
+    const { error: imageError } = await supabase
+      .from("project_images")
+      .insert(imageRows);
+
+    if (imageError) throw imageError;
   }
 
   return updatedProject;
@@ -127,37 +118,35 @@ const updateProjectService = async (id, projectData) => {
 
 // delete project images (handle SQL)
 const deleteProjectImageService = async (imgId) => {
-  const result = await pool.query(
-    `
-    DELETE FROM project_images
-    WHERE id = $1
-    RETURNING *
-    `,
-    [imgId]
-  );
+  const { data, error } = await supabase
+    .from("project_images")
+    .delete()
+    .eq("id", imgId)
+    .select()
+    .single();
 
-  return result.rows[0];
+  if (error) throw error;
+
+  return data;
 };
 
 // delete project (handle SQL)
 const deleteProjectService = async (id) => {
-  const result = await pool.query(
-    `
-    DELETE FROM projects
-    WHERE id = $1
-    RETURNING *
-    `,
-    [id]
-  );
+  const { data, error } = await supabase
+    .from("projects")
+    .delete()
+    .eq("id", id)
+    .select()
+    .single();
 
-  if (result.rows.length === 0) {
+  if (error || !data) {
     throw new Error("Project not found");
   }
 
-  return result.rows[0];
+  return data;
 };
 
-module.exports = {
+export {
   getProjectsService,
   postProjectService,
   updateProjectService,
