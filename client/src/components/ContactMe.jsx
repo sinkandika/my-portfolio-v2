@@ -2,7 +2,7 @@ function ContactMe () {
   return (
     <div 
     id="contactMe"
-    className="relative bg-white p-10 md:p-40 flex flex-col gap-y-10 ">
+    className="relative bg-white p-10 md:p-40 flex flex-col gap-y-10 z-10">
       <p className="text-2xl text-hero">
         Contact Me
       </p>

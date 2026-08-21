@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import ImagePreviewModal from "./ImagePreviewModal";
 
 function ProjectCard ({ project }) {
 
@@ -8,7 +9,9 @@ function ProjectCard ({ project }) {
   const [currentImage, setCurrentImage] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  // image previous and next fucntion
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  // image previous and next function
   const nextImage = () => {
     if (!project.images?.length) return;
     
@@ -53,7 +56,7 @@ function ProjectCard ({ project }) {
     whileInView={{ opacity: 1, x: 0}}
     viewport={{ once: true }}
     transition={{ duration: 0.8 }}
-    className="flex justify-center gap-10 flex-col-reverse xl:flex-row py-10"
+    className="flex justify-center gap-10 flex-col-reverse xl:flex-row py-10 z-90"
     >
       <div className="flex flex-1 flex-col">
         <p className="text-secondary">
@@ -100,6 +103,7 @@ function ProjectCard ({ project }) {
                 custom={direction}
                 src={project.images[currentImage]?.image_url}
                 alt={project.title}
+                onClick={() => setIsPreviewOpen(true)}
                 className="w-xl object-cover"
                 variants={imageVariants}
                 initial="enter"
@@ -145,6 +149,13 @@ function ProjectCard ({ project }) {
 
         </div>
       </div>
+
+      <ImagePreviewModal 
+      isOpen={isPreviewOpen}
+      images={project.images}
+      currentImage={currentImage}
+      onClose={() => setIsPreviewOpen(false)}
+      />
 
     </motion.div>
   );

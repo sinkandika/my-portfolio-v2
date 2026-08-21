@@ -2,7 +2,7 @@ import SnkIcon from "../assets/sinkandika-icon.svg";
 
 function NavBar () {
   return (
-    <div className="bg-white flex py-5 px-7 justify-between items-center sticky z-99 top-0">
+    <div className="bg-white flex py-5 px-7 justify-between items-center sticky z-50 top-0">
       <div>
         <a href="#homePage">
           <img

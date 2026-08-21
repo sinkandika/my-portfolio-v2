@@ -3,7 +3,7 @@ function AboutMe () {
   return (
     <div 
     id="about"
-    className="relative bg-white p-10 md:p-40 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] z-97 "
+    className="relative bg-white p-10 md:p-40 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] z-30 "
     >
       <motion.div
       initial={{ opacity: 0, y:-100}}

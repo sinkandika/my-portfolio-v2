@@ -4,7 +4,7 @@ import MyImage from "../assets/my-image.jpg";
 function Hero () {
 
   return (
-    <div className="relative bg-white p-10 md:p-40 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] z-98">
+    <div className="relative bg-white p-10 md:p-40 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] z-40">
       <motion.div
       initial={{ opacity: 0, x: -100 }}
       animate={{ opacity: 1, x: 0 }}
